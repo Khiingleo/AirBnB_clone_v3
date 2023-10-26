@@ -17,7 +17,7 @@ def tear_down(self):
 
 
 @app.errorhandler(404)
-def not_found_404():
+def not_found_404(error):
     """handler for 404 errors"""
     response = make_response(jsonify({'error': 'Not found'}))
     response.status_code = 404
