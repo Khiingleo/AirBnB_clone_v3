@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from storage import models
+from models import storage
 from api.v1.views import app_views
 from flask import Flask, jsonify, make_response
 from os import getenv
