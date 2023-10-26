@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-from storage import models
+from models import storage
 from api.v1.views import app_views
-from flask import Flask, Blueprint
+from flask import Flask, jsonify, make_response
 from os import getenv
 
 
@@ -14,6 +14,14 @@ app.register_blueprint(app_views)
 def tear_down(self):
     """closes session"""
     storage.close()
+
+
+@app.errorhandler(404)
+def not_found_404():
+    """handler for 404 errors"""
+    response = make_response(jsonify({'error': 'Not found'}))
+    response.status_code = 404
+    return response
 
 
 if __name__ == "__main__":
