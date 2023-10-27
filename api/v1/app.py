@@ -2,8 +2,9 @@
 """ registers blueprint and starts flask"""
 from models import storage
 from api.v1.views import app_views
-from flask import Flask, jsonify, make_response
+from flask import Flask, make_response
 from os import getenv
+import json
 
 
 app = Flask(__name__)
@@ -19,7 +20,8 @@ def tear_down(self):
 @app.errorhandler(404)
 def not_found_404(error):
     """handler for 404 errors"""
-    response = make_response(jsonify({'error': 'Not found'}))
+    response = make_response(json.dumps({'error': 'Not found'},
+                             indent=2) + "\n")
     response.status_code = 404
     return response
 
