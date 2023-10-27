@@ -1,26 +1,23 @@
 #!/usr/bin/python3
-""" djsdj """
+""" flask app with routes status and stats """
 from api.v1.views import app_views
-import json
+from flask import jsonify
 from models import storage
 
 
 @app_views.route("/status")
 def status():
-    """ returns a JSON of OK status"""
-    return json.dumps({"status": "OK"}, indent=2) + "\n"
+    """ returns a JSON OK status"""
+    return jsonify({'status': 'OK'})
+
 
 
 @app_views.route("/stats")
 def stats():
-    """retrieves the number of each objects by type"""
-    class_stats = {
-            "amenities": storage.count("Amenity"),
-            "cities": storage.count("City"),
-            "places": storage.count("Place"),
-            "reviews": storage.count("Review"),
-            "states": storage.count("State"),
-            "users": storage.count("User")
-    }
-    response = json.dumps(class_stats, indent=2) + "\n"
-    return response
+    """ returns the count of all classes in the storage """
+    classes = {"amenities": "Amenity", "cities": "City", "places": "Place",
+               "reviews": "Review", "states": "State", "users": "User"}
+    class_stats = {}
+    for key, value in classes.items():
+        class_stats[key] = storage.count(value)
+    return jsonify(class_stats)
