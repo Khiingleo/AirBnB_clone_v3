@@ -1,13 +1,15 @@
 #!/usr/bin/python3
-""" djsdj """
+""" flask application with status route and stats route """
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
+
 
 @app_views.route("/status")
 def status():
     """ returns a JSON of OK status"""
     return jsonify({'status': 'Ok'})
+
 
 @app_views.route("/stats")
 def stats():
