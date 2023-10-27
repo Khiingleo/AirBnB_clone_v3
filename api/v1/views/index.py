@@ -4,10 +4,12 @@ from api.v1.views import app_views
 import json
 from models import storage
 
+
 @app_views.route("/status")
 def status():
     """ returns a JSON of OK status"""
     return json.dumps({"status": "OK"}, indent=2) + "\n"
+
 
 @app_views.route("/stats")
 def stats():
