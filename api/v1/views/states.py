@@ -7,12 +7,17 @@ from api.v1.views import app_views
 from models.state import State
 
 
+
 @app_views.route("/states", methods=['GET'], strict_slashes=False)
 def states():
     """ returns state in JSON format """
     states_list = []
     for state in storage.all('State').values():
-        states_list.append(state.to_dict())
+        state_dict = state.to_dict()
+        vertical_dict = {
+                key: value for key, value in state_dict.items()
+                }
+        states_list.append(vertical_dict)
     return jsonify(states_list)
 
 
