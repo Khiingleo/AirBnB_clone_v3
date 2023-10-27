@@ -7,7 +7,6 @@ from api.v1.views import app_views
 from models.state import State
 
 
-
 @app_views.route("/states", methods=['GET'], strict_slashes=False)
 def states():
     """ returns state in JSON format """
@@ -58,7 +57,7 @@ def update_state(states_id):
     if not request.get_json():
         return jsonify({"error": "Not a JSON"}), 400
     state_obj = storage.get(State, states_id)
-    if obj is None:
+    if state_obj is None:
         abort(404)
     obj_data = request.get_json()
     state_obj.name = obj_data['name']
