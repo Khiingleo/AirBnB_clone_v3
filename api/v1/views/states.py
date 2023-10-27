@@ -12,11 +12,7 @@ def states():
     """ returns state in JSON format """
     states_list = []
     for state in storage.all('State').values():
-        state_dict = state.to_dict()
-        vertical_dict = {
-                key: value for key, value in state_dict.items()
-                }
-        states_list.append(vertical_dict)
+        states_list.append(state.to_dict())
     return jsonify(states_list)
 
 
