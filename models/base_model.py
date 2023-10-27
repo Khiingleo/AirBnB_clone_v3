@@ -73,3 +73,17 @@ class BaseModel:
     def delete(self):
         """delete the current instance from the storage"""
         models.storage.delete(self)
+
+    def api_update(self, request=None):
+        """ This function updates an ubject with a request """
+        Ignore_list = [
+                'id', 'created_at', 'updated_at', 'email',
+                'state_id', 'user_id', 'city_id', 'place_id'
+                ]
+        if request:
+            a_dict = {
+                    k: v for k, v in request.items() if k not in Ignore_list
+                    }
+            for key, value in a_dict.items():
+                setattr(self, key, value)
+            self.save()
