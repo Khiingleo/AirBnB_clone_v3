@@ -53,12 +53,13 @@ def states_create():
 @app_views.route("/states/<states_id>", methods=['PUT'], strict_slashes=False)
 def update_state(states_id):
     """ updates an existing state object"""
-    state = storage.get(State, state_id)
-    if state is None:
-        return jsonify({'error': 'Not found'}), 404
-    data = request.get_json()
-    if data is None:
-        return jsonify({'error': 'Not a JSON'}), 400
-    state.name = data['name']
-    state.save()
-    return jsonify(state.to_dict()), 200
+    # check if incoming data is a valid json
+    if not request.get_json():
+        return jsonify({"error": "Not a JSON"}), 400
+    state_obj = storage.get(State, states_id)
+    if obj is None:
+        abort(404)
+    obj_data = request.get_json()
+    state_obj.name = obj_data['name']
+    state_obj.save()
+    return jsonify(state_obj.to_dict()), 200
