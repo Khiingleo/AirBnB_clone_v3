@@ -7,7 +7,6 @@ from api.v1.views import app_views
 from models.state import State
 
 
-
 @app_views.route("/states", methods=['GET'], strict_slashes=False)
 def states():
     """ returns state in JSON format """
