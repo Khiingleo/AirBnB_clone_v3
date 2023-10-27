@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 """ djsdj """
 from api.v1.views import app_views
-from flask import jsonify
+import json
 from models import storage
 
 @app_views.route("/status")
 def status():
     """ returns a JSON of OK status"""
-    return jsonify({'status': 'Ok'})
+    return json.dumps({"status": "OK"}, indent=2) + "\n"
 
 @app_views.route("/stats")
 def stats():
@@ -20,4 +20,5 @@ def stats():
             "states": storage.count("State"),
             "users": storage.count("User")
     }
-    return jsonify(class_stats)
+    response = json.dumps(class_stats, indent=2) + "\n"
+    return response
