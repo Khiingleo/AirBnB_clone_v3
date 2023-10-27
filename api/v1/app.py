@@ -1,10 +1,10 @@
 #!/usr/bin/python3
 
-from models import storage
 from api.v1.views import app_views
 from flask import Flask, make_response
-from os import getenv
 import json
+from models import storage
+from os import getenv
 
 
 app = Flask(__name__)
