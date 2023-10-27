@@ -14,12 +14,9 @@ def status():
 @app_views.route("/stats")
 def stats():
     """ returns the count of all classes in the storage """
-    class_stats = {
-        "amenities": storage.count("Amenity"),
-        "cities": storage.count("City"),
-        "places": storage.count("Place"),
-        "reviews": storage.count("Review"),
-        "states": storage.count("State"),
-        "users": storage.count("User")
-    }
-    return jsonify(class_stats)
+    classes = {"amenities": Amenity, "cities": City, "places": Place,
+               "reviews": Review, "states": State, "users": User}
+    stats_dict = {}
+    for key, value in classes.items():
+        stats_dict[key] = storage.count(value)
+    return jsonify(stats_dict)
