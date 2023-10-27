@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" flask application with status route and stats route """
+""" flask app with routes status and stats """
 from api.v1.views import app_views
 from flask import jsonify
 from models import storage
@@ -7,13 +7,13 @@ from models import storage
 
 @app_views.route("/status")
 def status():
-    """ returns a JSON of OK status"""
+    """ returns a JSON OK status"""
     return jsonify({'status': 'OK'})
 
 
 @app_views.route("/stats")
 def stats():
-    """retrieves the number of each objects by type"""
+    """ returns the count of the classes in storage """
     class_stats = {
             "amenities": storage.count("Amenity"),
             "cities": storage.count("City"),
@@ -21,5 +21,5 @@ def stats():
             "reviews": storage.count("Review"),
             "states": storage.count("State"),
             "users": storage.count("User")
-    }
+            }
     return jsonify(class_stats)

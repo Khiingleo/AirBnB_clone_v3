@@ -1,8 +1,8 @@
 #!/usr/bin/python3
-""" registers blueprint and starts flask"""
-from api.v1.views import app_views
+""" registers blueprint and starts flask """
 from flask import Flask, make_response, jsonify
 from models import storage
+from api.v1.views import app_views
 from os import getenv
 
 
@@ -12,14 +12,14 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def tear_down(self):
-    """closes session"""
-    storage.close()
+    """ closes query after each session """
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 @app.errorhandler(404)
-def not_found_404(error):
-    """handler for 404 errors"""
-    return make_response(jsonify({"error": "Not found"}), 404)
+def not_found(error):
+    """ returns a 404 response """
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == "__main__":
