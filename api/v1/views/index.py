@@ -1,14 +1,14 @@
 #!/usr/bin/python3
 """ flask application with status route and stats route """
 from api.v1.views import app_views
-import json
+from flask import jsonify
 from models import storage
 
 
 @app_views.route("/status")
 def status():
     """ returns a JSON of OK status"""
-    return json.dumps({"status": "OK"}, indent=2) + "\n"
+    return jsonify({'status': 'OK'})
 
 
 @app_views.route("/stats")
@@ -22,5 +22,4 @@ def stats():
             "states": storage.count("State"),
             "users": storage.count("User")
     }
-    response = json.dumps(class_stats, indent=2) + "\n"
-    return response
+    return jsonify(class_stats)
