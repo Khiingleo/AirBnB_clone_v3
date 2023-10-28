@@ -53,7 +53,7 @@ def post_city(state_id):
     data = request.get_json()
     if A_state is None:
         abort(404)
-    if not request.json:
+    if not data or data is None:
         return jsonify({'error': 'Not a JSON'}), 400
     if 'name' not in data:
         return jsonify({'error': 'Missing name'}), 400
@@ -67,12 +67,11 @@ def post_city(state_id):
                  strict_slashes=False)
 def put_city(city_id):
     """ updates an existing city """
-    if not request.get_json():
+    obj_data = request.get_json()
+    if not obj_data or obj_data is None:
         return jsonify({"error": "Not a JSON"}), 400
     city_obj = storage.get(City, city_id)
     if city_obj is None:
         abort(404)
-    obj_data = request.get_json()
-    city_obj.name = obj_data['name']
-    city_obj.save()
+    city_obj.api_update(obj_data)
     return jsonify(city_obj.to_dict()), 200

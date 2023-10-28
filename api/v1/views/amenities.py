@@ -3,10 +3,10 @@
     THis Module handles all default RESTFul API actions for amenities
     Author: Peter Ekwere
 """
-from api.v1.views import app_views
 from flask import abort, jsonify, request
-from models import storage
+from api.v1.views import app_views
 from models.amenity import Amenity
+from models import storage
 
 
 @app_views.route('/amenities', methods=['GET'],
@@ -47,7 +47,7 @@ def delete_amenity(amenity_id):
 def post_amenity():
     """ creates a new amenity """
     data = request.get_json()
-    if not request.json:
+    if not data:
         return jsonify({'error': 'Not a JSON'}), 400
     if 'name' not in data:
         return jsonify({'error': 'Missing name'}), 400
@@ -60,12 +60,11 @@ def post_amenity():
                  strict_slashes=False)
 def put_amenity(amenity_id):
     """ updates an existing amenity """
-    if not request.get_json():
+    amenity_data = request.get_json()
+    if not amenity_data:
         return jsonify({"error": "Not a JSON"}), 400
     amenity_obj = storage.get(Amenity, amenity_id)
     if amenity_obj is None:
         abort(404)
-    amenity_data = request.get_json()
-    amenity_obj.name = amenity_data['name']
-    amenity_obj.save()
+    amenity_obj.api_update(amenity_data)
     return jsonify(amenity_obj.to_dict()), 200
