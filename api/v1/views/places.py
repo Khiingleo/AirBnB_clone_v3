@@ -39,7 +39,7 @@ def place_delete(place_id):
     place = storage.get(Place, place_id)
     if place is None:
         abort(404)
-    place.delete
+    place.delete()
     storage.save()
     return jsonify({}), 200
 
