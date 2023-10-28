@@ -16,29 +16,29 @@ def get_cities(state_id=None):
     """ This function returns all cities associated with a state """
     a_list = []
     a_state = storage.get(State, state_id)
-    if a_state is None:
+    if not a_state or a_state is None:
         abort(404)
     for city in a_state.cities:
         a_list.append(city.to_dict())
-    return jsonify(a_list)
+    return jsonify(a_list), 200
 
 
-@app_views.route('/cities/<city_id>', methods=['GET'],
+@app_views.route('/cities/<string:city_id>', methods=['GET'],
                  strict_slashes=False)
 def get_city(city_id=None):
     """ This function returns a city based on the id """
     a_city = storage.get(City, city_id)
-    if a_city is None:
+    if not a_city or a_city is None:
         abort(404)
-    return jsonify(a_city.to_dict())
+    return jsonify(a_city.to_dict()), 200
 
 
-@app_views.route("/cities/<city_id>", methods=['DELETE'],
+@app_views.route("/cities/<string:city_id>", methods=['DELETE'],
                  strict_slashes=False)
 def delete_city(city_id):
     """ deletes a state based on it's id"""
     city = storage.get(City, city_id)
-    if city is None:
+    if not city or city is None:
         abort(404)
     city.delete()
     storage.save()
@@ -54,22 +54,23 @@ def post_city(state_id):
     if A_state is None:
         abort(404)
     if not data or data is None:
-        return jsonify({'error': 'Not a JSON'}), 400
-    if 'name' not in data:
-        return jsonify({'error': 'Missing name'}), 400
+        abort(400, 'Not a JSON')
+    if not data.get('name'):
+        abort(400, 'Missing name')
     data["state_id"] = state_id
     new_city = City(**data)
-    new_city.save()
+    storage.new(City)
+    storage.save()
     return jsonify(new_city.to_dict()), 201
 
 
-@app_views.route("/cities/<city_id>", methods=['PUT'],
+@app_views.route("/cities/<string:city_id>", methods=['PUT'],
                  strict_slashes=False)
 def put_city(city_id):
     """ updates an existing city """
     obj_data = request.get_json()
     if not obj_data or obj_data is None:
-        return jsonify({"error": "Not a JSON"}), 400
+        abort(400, "Not a JSON")
     city_obj = storage.get(City, city_id)
     if city_obj is None:
         abort(404)
