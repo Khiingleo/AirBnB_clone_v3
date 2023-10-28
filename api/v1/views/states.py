@@ -41,7 +41,7 @@ def states_delete(state_id):
 def states_create():
     """ creates a new state """
     data = request.get_json()
-    if data is None:
+    if data is None or not data:
         return jsonify({'error': 'Not a JSON'}), 400
     if 'name' not in data:
         return jsonify({'error': 'Missing name'}), 400
@@ -50,16 +50,14 @@ def states_create():
     return jsonify(new_state.to_dict()), 201
 
 
-@app_views.route("/states/<states_id>", methods=['PUT'], strict_slashes=False)
-def update_state(states_id):
+@app_views.route("/states/<state_id>", methods=['PUT'], strict_slashes=False)
+def update_state(state_id):
     """ updates an existing state object"""
-    # check if incoming data is a valid json
-    if not request.get_json():
+    obj_data = request.get_json()
+    if not obj_data or obj_data is None:
         return jsonify({"error": "Not a JSON"}), 400
-    state_obj = storage.get(State, states_id)
+    state_obj = storage.get(State, state_id)
     if state_obj is None:
         abort(404)
-    obj_data = request.get_json()
-    state_obj.name = obj_data['name']
-    state_obj.save()
+    state_obj.api_update(obj_data)
     return jsonify(state_obj.to_dict()), 200
