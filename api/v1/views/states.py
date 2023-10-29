@@ -10,15 +10,6 @@ from models.state import State
 
 
 @app_views.route('/states', methods=['GET'], strict_slashes=False)
-def state():
-    """ returns the state objects as json """
-    states_list = []
-    for state in storage.all(State).values():
-        states_list.append(state.to_dict())
-    return jsonify(states_list)
-
-
-@app_views.route('/states', methods=['GET'], strict_slashes=False)
 def states():
     """ returns the state objects as json """
     states_list = []
@@ -52,30 +43,27 @@ def delete_state(state_id):
 @app_views.route('/states', methods=['POST'], strict_slashes=False)
 def create_state():
     """ creates a new state object """
-    if not request.get_json():
-        return jsonify({"error": "Not a JSON"}), 400
     data = request.get_json()
-    if not data or data is None:
+    if not data():
         return jsonify({"error": "Not a JSON"}), 400
-    if 'name' not in data:
+    elif "name" not in data:
         return jsonify({"error": "Missing name"}), 400
-    new_state = State(**data)
-    new_state.save()
-    return jsonify(new_state.to_dict()), 201
+    else:
+        new_state = State(**data)
+        new_state.save()
+        return jsonify(new_state.to_dict()), 201
 
 
 @app_views.route('/states/<state_id>', methods=['PUT'], strict_slashes=False)
 def update_state(state_id):
     """ update a state object by id """
-    if not request.get_json():
+    data = request.get_json()
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
 
     state = storage.get(State, state_id)
-    if not state or state is None:
+    if state is None:
         abort(404)
-    data = request.get_json()
-    if not data or data is None:
-        return jsonify({"error": "Not a JSON"}), 400
     for key, value in data.items():
         if key not in ("id", "created_at", "updated_at"):
             setattr(state, key, value)
