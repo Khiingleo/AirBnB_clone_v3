@@ -2,7 +2,6 @@
 """ flask app with routes status and stats """
 from api.v1.views import app_views
 from flask import jsonify, request
-import json
 from models import storage
 from models.state import State
 from models.city import City
@@ -18,7 +17,7 @@ def status():
     return jsonify({'status': 'OK'})
 
 
-@app_views.route("/stats", methods=['GET'])
+@app_views.route("/stats", methods=['GET'], strict_slashes=False)
 def stats():
     """ returns the count of all classes in the storage """
     if request.method == 'GET':
@@ -27,4 +26,4 @@ def stats():
         class_stats = {}
         for key, value in classes.items():
             class_stats[key] = storage.count(value)
-        return json.dumps(class_stats, indent=2) + "\n"
+        return jsonify(class_stats)
