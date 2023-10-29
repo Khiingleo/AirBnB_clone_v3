@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-""" flask app with routes status and stats """
+"""
+    flask app with routes status and stat
+"""
 from api.v1.views import app_views
 from flask import jsonify, request
 from models import storage
