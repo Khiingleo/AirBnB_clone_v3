@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-""" restful api for class city """
+"""
+    restful api for class city
+    Author: peter
+"""
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models import storage

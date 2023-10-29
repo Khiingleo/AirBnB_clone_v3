@@ -1,6 +1,8 @@
 #!/usr/bin/python3
-""" restful api for the Users class """
+"""
+    restful api for the Users class
 
+"""
 from flask import jsonify, request, abort
 from models import storage
 from api.v1.views import app_views

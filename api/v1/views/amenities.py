@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-""" restful api fro the amenity class """
+"""
+    restful api from the amenity class
+    Author: Peter
+"""
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models import storage

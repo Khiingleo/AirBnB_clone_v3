@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-""" restful api for states class """
+"""
+    restful api for states class
+
+"""
 from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models import storage
