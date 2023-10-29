@@ -44,7 +44,7 @@ def delete_state(state_id):
 def create_state():
     """ creates a new state object """
     data = request.get_json()
-    if not data():
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
     elif "name" not in data:
         return jsonify({"error": "Missing name"}), 400
