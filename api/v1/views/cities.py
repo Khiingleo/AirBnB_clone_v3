@@ -45,34 +45,31 @@ def delete_city(city_id):
                  strict_slashes=False)
 def create_city(state_id):
     """create a new city object in a state """
-    if not request.get_json():
-        return jsonify({"error": "Not a JSON"}), 400
     data = request.get_json()
-    if not data or data is None:
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
-    elif 'name' not in data:
+    elif "name" not in data:
         return jsonify({"error": "Missing name"}), 400
-    state = storage.get(State, state_id)
-    if not state or state is None:
-        abort(404)
-    data['state_id'] = state.id
-    new_city = City(**data)
-    new_city.save()
-    return jsonify(new_city.to_dict()), 201
+    else:
+        state = storage.get(State, state_id)
+        if state is None:
+            abort(404)
+        data['state_id'] = state.id
+        city = City(**data)
+        city.save()
+        return jsonify(city.to_dict()), 201
 
 
 @app_views.route('/cities/<city_id>', methods=['PUT'], strict_slashes=False)
 def update_city(city_id):
     """ updates a city object using it's id """
-    if not request.get_json():
-        return jsonify({"error": "Not a JSON"}), 400
     data = request.get_json()
-    if not data or data is None:
+    if not data:
         return jsonify({"error": "Not a JSON"}), 400
-    city = storage.get(City, city_id)
-    if not city or city is None:
-        abort(404)
 
+    city = storage.get(City, city_id)
+    if city is None:
+        abort(404)
     ignore_keys = ['id', 'state_id', 'created_at', 'updated_at']
     for key, value in data.items():
         if key not in ignore_keys:
