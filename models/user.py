@@ -2,10 +2,9 @@
 """ holds class User"""
 import models
 from models.base_model import BaseModel, Base
-from os import getenv
-import sqlalchemy
 from sqlalchemy import Column, String
 from sqlalchemy.orm import relationship
+import hashlib
 
 
 class User(BaseModel, Base):
@@ -26,4 +25,15 @@ class User(BaseModel, Base):
 
     def __init__(self, *args, **kwargs):
         """initializes user"""
+        if kwargs:
+            password = kwargs.pop('password', None)
+            if password:
+                User.hash_password(self, password)
         super().__init__(*args, **kwargs)
+
+    def hash_password(self, password):
+        """ hashes a password """
+        hashed_object = hashlib.md5()
+        hashed_object.update(password.encode("utf-8"))
+        hashed_password = hashed_object.hexdigest()
+        setattr(self, "password", hashed_password)
