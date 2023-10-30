@@ -33,6 +33,7 @@ class User(BaseModel, Base):
 
     def hash_password(self, password):
         """ hashes a password """
-        hashed = hashlib.md5().update(password.encode("utf-8"))
-        hashed_password = hashed.hexdigest()
+        hashed_object = hashlib.md5()
+        hashed_object.update(password.encode("utf-8"))
+        hashed_password = hashed_object.hexdigest()
         setattr(self, "password", hashed_password)
